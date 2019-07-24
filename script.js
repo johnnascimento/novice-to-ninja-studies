@@ -93,5 +93,7 @@ window.onload = () => {
     update($question, `Game Over, you scored ${score} point${score !== 1 ? 's' : ''}`, 'gameOver');
   };
   
-  $startBtn.addEventListener('click', playQuiz(quiz));
+  $startBtn.addEventListener('click', () => {
+      return playQuiz(quiz);
+    });
 };
