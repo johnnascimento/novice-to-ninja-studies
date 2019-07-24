@@ -16,9 +16,10 @@ window.onload = () => {
   let $counter = dGetById('counter');
   let $inputEntry = dGetById('answerQuestion');
   let $btnChecker = dGetById('btnChecker');
+  let $startBtn = dGetById('startBtn');
   
   const quiz = {
-    name: "Suoer hero Quiz",
+    name: "Super hero Quiz",
     description: "Hiw many super heroes can you name?",
     questions: [
       { name: "Superman",realName: "Clark Kent" },
@@ -61,7 +62,7 @@ window.onload = () => {
   const ask = (question) => {
     update($question, question);
     let counter = 20;
-    var myInterval = setInterval(() => {
+   /* var myInterval = setInterval(() => {
       $counter.innerHTML = counter;
       counter--;
       
@@ -69,14 +70,9 @@ window.onload = () => {
         gameOver();
         clearInterval(myInterval);
       }
-    }, 1000);
+    }, 1000);*/
+    return prompt(question);
     
-    $btnChecker.addEventListener('click', (ev) => {
-      let dataStored = $inputEntry.value;
-      console.log('input entry ' + dataStored);
-      return dataStored;
-    });
-    return dataStored;
   };
   
   const check = (answer, idx) => {
@@ -97,5 +93,5 @@ window.onload = () => {
     update($question, `Game Over, you scored ${score} point${score !== 1 ? 's' : ''}`, 'gameOver');
   };
   
-    playQuiz(quiz);
+  $startBtn.addEventListener('click', playQuiz(quiz));
 };

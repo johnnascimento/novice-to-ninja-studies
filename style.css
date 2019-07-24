@@ -7,7 +7,7 @@
   background-color: coral;
 }
 
-section pv{
+section p {
   font: bold 2.4rem alArial, Helvetica, sans-serif;
   background-color: #ccc;
   border: #999 2px solid;
@@ -51,4 +51,13 @@ header p .score {
   border: 2px solid #414141;
   border-radius: 100%;
   padding: 8px;
+}
+
+#startBtn {
+  font-size: 1.8rem;
+  color: white;
+  background-color: #423120;
+  width: 300px;
+  padding: 16px;
+  margin: 8px auto;
 }
