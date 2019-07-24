@@ -1,0 +1,54 @@
+/* Amazing quiz style sheet*/
+:root body {
+  font-size: 62.5%; /* 1rem = 10px*/
+}
+
+.amazingQuiz {
+  background-color: coral;
+}
+
+section pv{
+  font: bold 2.4rem alArial, Helvetica, sans-serif;
+  background-color: #ccc;
+  border: #999 2px solid;
+  color: #777;
+  text-align: center;
+  padding: 16px;
+  margin: 16px;
+  min-width: 300px;
+}
+
+.right {
+  background: lightgreen;
+  border: green 2px solid;
+  color: #226622;
+}
+
+.wrong {
+  background: darkred;
+  border: red 2px solid;
+  color: #662222;
+}
+
+header {
+  display: block;
+  position: relative;
+  width: 100%;
+  min-height: 32px;
+}
+
+header p,
+header p .score {
+  display: inline-block;
+  position: relative;
+}
+
+.score {
+  font-size: 1.8rem;
+  color: #414141;
+  font-weight: bold;
+  background-color: #fcfcfc;
+  border: 2px solid #414141;
+  border-radius: 100%;
+  padding: 8px;
+}

@@ -1,103 +1,101 @@
 window.onload = () => {
-  const quiz = [
-    { name: "Superman",realName: "Clark Kent" },
-    { name: "Wonderwoman",realName: "Dianna Prince" },
-    { name: "Batman",realName: "Bruce Wayne" },
-  ];
-  // View Object
-  const view = {
-    score: document.querySelector('#score strong'),
-    question: document.querySelector('#question'),
-    result: document.querySelector('#result'),
-    info: document.querySelector('#info'),
-    start: document.querySelector('#start'),
-    response: document.querySelector('#response'),
-    timer: document.querySelector('#timer strong'),
-    render(target,content,attributes) {
-      for(const key in attributes) {
-        target.setAttribute(key, attributes[key]);
+  // Helpers
+  const d = document;
+  const b = d.body || d.bodyElement;
+  const w = window;
+  const dQuery = elem => { return d.querySelector(elem) };
+  const dGetById = elem => { return d.getElementById(elem) };
+  const dGetByClass = elem => { return d.getElementsByClassName(elem) };
+  
+  ///// score initialization and DOM references
+  let score;
+  let $question = dGetById('question');
+  console.log('$question: ' + $question);
+  let $score = dGetById('score');
+  let $feedback = dGetById('feedback');
+  let $counter = dGetById('counter');
+  let $inputEntry = dGetById('answerQuestion');
+  let $btnChecker = dGetById('btnChecker');
+  
+  const quiz = {
+    name: "Suoer hero Quiz",
+    description: "Hiw many super heroes can you name?",
+    questions: [
+      { name: "Superman",realName: "Clark Kent" },
+      { name: "Wonderwoman",realName: "Dianna Prince" },
+      { name: "Batman",realName: "Bruce Wayne" }
+    ]
+  };
+  
+  // View functions
+  const update = (elem, content, klass) => {
+    console.log(elem);
+    var p;
+    
+      p = (!elem.firstChild) ? d.createElement('p') : elem.firstChild;
+      p.textContent = content;
+      elem.appendChild(p);
+      if(klass) {
+        p.className = klass;
       }
-      target.innerHTML = content;
-    },
-    show(element){
-      element.style.display = 'block';
-    },
-    hide(element){
-      element.style.display = 'none';
-    },
-    resetForm(){
-      this.response.answer.value = '';
-      this.response.answer.focus();
-    },
-    setup(){
-      this.show(this.question);
-      this.show(this.response);
-      this.show(this.result);
-      this.hide(this.start);
-      this.render(this.score,game.score);
-      this.render(this.result,'');
-      this.render(this.info,'');
-      this.resetForm();
-    },
-    teardown(){
-      this.hide(this.question);
-      this.hide(this.response);
-      this.show(this.start);
+  };
+   
+   
+  let max = (quiz.questions.length)-1;
+  
+  const playQuiz = (quiz) => {
+    score = 0;
+    update($score, score);
+    //update($question, question);
+    
+    for(var i=0; i<=max; i++) {
+      // Main game loop
+      let question = `What\'s ${quiz.questions[i].name}\'s real name?`;
+      let answer = ask(question);
+      check(answer, i);
+    }
+    // End of main loop
+    gameOver();
+  };
+  
+  const ask = (question) => {
+    update($question, question);
+    let counter = 20;
+    var myInterval = setInterval(() => {
+      $counter.innerHTML = counter;
+      counter--;
+      
+      if(counter < 0) {
+        gameOver();
+        clearInterval(myInterval);
+      }
+    }, 1000);
+    
+    $btnChecker.addEventListener('click', (ev) => {
+      let dataStored = $inputEntry.value;
+      console.log('input entry ' + dataStored);
+      return dataStored;
+    });
+    return dataStored;
+  };
+  
+  const check = (answer, idx) => {
+    // Check if the answer is correct
+    if(answer.toLowerCase() === quiz.questions[idx].realName.toLowerCase()) {
+      update($feedback, 'correct', 'right');
+      //Increase score by 1
+      score++;
+      update($score, score);
+    } else {
+      update($feedback, 'wrong', 'wrong');
     }
   };
   
-  const game = {
-    start(quiz){
-      console.log('start() invoked');
-      this.score = 0;
-      this.questions = [...quiz];
-      view.setup();
-      this.secondsRemaining = 20;
-      this.timer = setInterval( this.countdown , 1000 );
-      this.ask();
-    },
-    countdown() {
-      game.secondsRemaining--;
-      view.render(view.timer,game.secondsRemaining);
-      if(game.secondsRemaining <= 0) {
-        game.gameOver();
-      }
-    },
-    ask(name){
-      console.log('ask() invoked');
-      if(this.questions.length > 0) {
-        this.question = this.questions.pop();
-        const question = `What is ${this.question.name}'s real name?`;
-        view.render(view.question,question);
-      }
-      else {
-        this.gameOver();
-      }
-    },
-    check(event){
-      console.log('check(event) invoked');
-      event.preventDefault();
-      const response = view.response[0].value;
-      const answer = this.question.realName;
-      if(response === answer){
-        view.render(view.result,'Correct!',{'class':'correct'});
-        this.score++;
-        view.render(view.score,this.score);
-      } else {
-        view.render(view.result,`Wrong! The correct answer was ${answer}`,{'class':'wrong'});
-      }
-      view.resetForm();
-      this.ask();
-    },
-    gameOver(){
-      console.log('gameOver() invoked');
-      view.render(view.info,`Game Over, you scored ${this.score} point${this.score !== 1 ? 's' : ''}`);
-      view.teardown();
-      clearInterval(this.timer);
-    }
+  const gameOver = () => {
+    // Inform the player that the game has finished and tell them how many points they've made
+    console.log('gameOver() invoked');
+    update($question, `Game Over, you scored ${score} point${score !== 1 ? 's' : ''}`, 'gameOver');
   };
   
-  view.start.addEventListener('click', () => game.start(quiz), false);
-  view.response.addEventListener('submit', (event) => game.check(event), false);
-  view.hide(view.response);
+    playQuiz(quiz);
 };
