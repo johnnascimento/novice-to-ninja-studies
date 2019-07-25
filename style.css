@@ -61,3 +61,14 @@ header p .score {
   padding: 16px;
   margin: 8px auto;
 }
+
+body {
+  width: 400px;
+  margin: 0 auto;
+  background: #fcfcfc;
+  height: 100vh;
+}
+
+html {
+  background: #444;
+}
