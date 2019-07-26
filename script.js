@@ -67,6 +67,7 @@ window.onload = () => {
     console.log('playquiz update function executed');
     
     $form.addEventListener('submit', (ev) => {
+      i++;
       ev.preventDefault();
       check($form[0].value, i);
     }, false);
@@ -79,16 +80,15 @@ window.onload = () => {
   const chooseQuestion = (i) => {
     console.log('It came into the choose question');
     question = `What\'s ${quiz.questions[i].name}\'s real name?`;
-    ask(question);
     
-    i++;
-    console.log(i);
-    if(i === quiz.questions.length) {
-      console.log('came into IF of choose question');
-      gameOver();
-    } else {
-      chooseQuestion(i);
-    }
+    console.log('value of I: ' + i);
+    /*if(i === quiz.questions.length) {
+      console.log('came into IF of choose question ' + quiz.question.length);
+      return gameOver();
+    } else {*/
+      console.log('Question asked');
+      return ask(question, i);
+  /*  } */
   };
   
   
@@ -96,18 +96,7 @@ window.onload = () => {
     update($question, question);
     $form[0].value = "";
     $form.focus();
-  };
-  
-  const check = (answer, idx) => {
-    // Check if the answer is correct
-    if(answer.toLowerCase() === quiz.questions[i].realName.toLowerCase()) {
-      update($feedback, 'correct', 'right');
-      //Increase score by 1
-      score++;
-      update($score, score);
-    } else {
-      update($feedback, 'wrong', 'wrong');
-    }
+    return;
   };
   
   const gameOver = () => {
@@ -115,6 +104,37 @@ window.onload = () => {
     showElement($startBtn);
     console.log('gameOver() invoked');
     update($question, `Game Over, you scored ${score} point${score !== 1 ? 's' : ''}`, 'gameOver');
+    return;
+  };
+  
+  const check = (answer, i) => {
+    // Check if the answer is correct
+    console.log('value of i in check: ' + i + ' quiz length' + quiz.questions.length-1);
+    
+    if(answer.toLowerCase() === quiz.questions[i-1].realName.toLowerCase()) {
+      update($feedback, 'correct', 'right');
+      console.log('$$$$$$check question went right');
+      //Increase score by 1
+      score++;
+      update($score, score);
+      
+      if(i === quiz.questions.length) {
+        console.log('i is equal quiz length***************');
+        return gameOver();
+      } else {
+        chooseQuestion(i);
+      }
+    } else {
+      console.log('+++++check question went wrong');
+      update($feedback, 'wrong', 'wrong');
+      
+      if(i === quiz.questions.length) {
+        console.log('i is equal quiz length***************');
+        return gameOver();
+      } else {
+        chooseQuestion(i);
+      }
+    }
   };
   
   $startBtn.addEventListener('click', () => {

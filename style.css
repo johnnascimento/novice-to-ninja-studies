@@ -3,6 +3,12 @@
   font-size: 62.5%; /* 1rem = 10px*/
 }
 
+body {
+  margin: 0 auto;
+  padding: 16px;
+  text-align: center;
+}
+
 .amazingQuiz {
   background-color: coral;
 }
