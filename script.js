@@ -1,3 +1,5 @@
+(() => { 
+  "use strict";
 window.onload = () => {
   // Helpers
   const d = document;
@@ -8,9 +10,9 @@ window.onload = () => {
   const dGetByClass = elem => { return d.getElementsByClassName(elem) };
   
   ///// score initialization and DOM references
-  let score;
+  let score, question;
+  let i = 0;
   let $question = dGetById('question');
-  console.log('$question: ' + $question);
   let $score = dGetById('score');
   let $feedback = dGetById('feedback');
   let $counter = dGetById('counter');
@@ -33,9 +35,8 @@ window.onload = () => {
   
   // View functions
   const update = (elem, content, klass) => {
-    console.log(elem);
+    console.log('update() invoked');
     var p;
-    
       p = (!elem.firstChild) ? d.createElement('p') : elem.firstChild;
       p.textContent = content;
       elem.appendChild(p);
@@ -55,44 +56,27 @@ window.onload = () => {
   hideElement($form);
   
   const playQuiz = (quiz) => {
+    console.log('PlayQuiz() invoked');
     hideElement($startBtn);
-    console.log('start btn hidden');
     showElement($form);
-    console.log('show form activated');
     
     score = 0;
     let question;
-    let i = 0;
+    i = 0;
     update($score, score);
-    console.log('playquiz update function executed');
-    
-    $form.addEventListener('submit', (ev) => {
-      i++;
-      ev.preventDefault();
-      check($form[0].value, i);
-    }, false);
-    
-    chooseQuestion(i);
-    console.log('choose question executed');
+    chooseQuestion();
   };
   
   
-  const chooseQuestion = (i) => {
-    console.log('It came into the choose question');
+  const chooseQuestion = () => {
+    console.log('chooseQuestion() invoked');
     question = `What\'s ${quiz.questions[i].name}\'s real name?`;
-    
-    console.log('value of I: ' + i);
-    /*if(i === quiz.questions.length) {
-      console.log('came into IF of choose question ' + quiz.question.length);
-      return gameOver();
-    } else {*/
-      console.log('Question asked');
-      return ask(question, i);
-  /*  } */
+    return ask(question, i);
   };
   
   
   const ask = (question) => {
+    console.log('Ask() function invoked');
     update($question, question);
     $form[0].value = "";
     $form.focus();
@@ -100,44 +84,56 @@ window.onload = () => {
   };
   
   const gameOver = () => {
+    console.log('gameOver() invoked');
     hideElement($form);
     showElement($startBtn);
-    console.log('gameOver() invoked');
     update($question, `Game Over, you scored ${score} point${score !== 1 ? 's' : ''}`, 'gameOver');
     return;
   };
   
   const check = (answer, i) => {
     // Check if the answer is correct
-    console.log('value of i in check: ' + i + ' quiz length' + quiz.questions.length-1);
+    console.log('Check() function invoked');
     
-    if(answer.toLowerCase() === quiz.questions[i-1].realName.toLowerCase()) {
-      update($feedback, 'correct', 'right');
-      console.log('$$$$$$check question went right');
-      //Increase score by 1
-      score++;
-      update($score, score);
+    if(i === quiz.questions.length || i > quiz.questions.length) {
       
-      if(i === quiz.questions.length) {
-        console.log('i is equal quiz length***************');
-        return gameOver();
+      if(answer.toLowerCase() === quiz.questions[i-1].realName.toLowerCase()) {
+        //Increase score by 1
+        score++;
+        update($score, score);
+        return gameOver(i);
       } else {
-        chooseQuestion(i);
+        update($feedback, 'wrong', 'wrong');
+        return gameOver(i);
       }
     } else {
-      console.log('+++++check question went wrong');
-      update($feedback, 'wrong', 'wrong');
-      
-      if(i === quiz.questions.length) {
-        console.log('i is equal quiz length***************');
-        return gameOver();
+      if(answer.toLowerCase() === quiz.questions[i-1].realName.toLowerCase()) {
+        update($feedback, 'correct', 'right');
+        //Increase score by 1
+        score++;
+        update($score, score);
+        chooseQuestion(i);
       } else {
+        update($feedback, 'wrong', 'wrong');
         chooseQuestion(i);
       }
     }
   };
   
+  // Event listeners
+  // ------------------------
   $startBtn.addEventListener('click', () => {
       return playQuiz(quiz);
     });
-};
+    
+  $form.addEventListener('submit', (ev) => {
+      if(i<3){
+        i++;
+      } else {
+        i = 0;
+      }
+      ev.preventDefault();
+      check($form[0].value, i);
+  }, false);
+ };
+})();
