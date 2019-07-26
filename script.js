@@ -11,7 +11,6 @@ window.onload = () => {
   
   ///// score initialization and DOM references
   let score, question;
-  let i = 0;
   let $question = dGetById('question');
   let $score = dGetById('score');
   let $feedback = dGetById('feedback');
@@ -24,10 +23,15 @@ window.onload = () => {
   const quiz = {
     name: "Super hero Quiz",
     description: "Hiw many super heroes can you name?",
+    question: "What\'s the resl name of ",
     questions: [
-      { name: "Superman",realName: "Clark Kent" },
-      { name: "Wonderwoman",realName: "Dianna Prince" },
-      { name: "Batman",realName: "Bruce Wayne" }
+      { name: "Superman",realName: "Clark Kent", "asked": false },
+      { name: "Wonderwoman",realName: "Dianna Prince", "asked": false },
+      { name: "Batman",realName: "Bruce Wayne", "asked": false },
+      { name: "Batman",realName: "Bruce Wayne", "asked": false },
+      { name: "The Flash",realName: "Bary Allen", "asked": false },
+      { name: "The Green Arrow",realName: "Oliver Queen", "asked": false },
+      { name: "Aquamam",realName: "Arthur Curry", "asked": false }
     ]
   };
   
@@ -52,7 +56,6 @@ window.onload = () => {
   const hideElement = (elem) => {
     elem.style.display = "none";
   };
-  
   hideElement($form);
   
   const playQuiz = (quiz) => {
@@ -62,22 +65,41 @@ window.onload = () => {
     
     score = 0;
     let question;
-    i = 0;
     update($score, score);
     chooseQuestion();
+  };
+  
+  const random = (a, b, callback) => {
+    if(b === undefined || b === null) {
+      //if only one argument was supplied, assume that the lower limit is 1
+      b = a, a = 1;
+    }
+    
+    var result = Math.floor((b-a+1) * Math.random()) + a;
+    
+    if(typeof callback === "function") {
+      result = callback(result);
+    }
+    return result;
   };
   
   
   const chooseQuestion = () => {
     console.log('chooseQuestion() invoked');
-    question = `What\'s ${quiz.questions[i].name}\'s real name?`;
-    return ask(question, i);
+    var questions = quiz.questions.filter((elem) => {
+      return elem.asked === false;
+    });
+    // set the current question
+    question = questions[random(questions.length) - 1];
+    
+    return ask(question);
   };
   
   
   const ask = (question) => {
     console.log('Ask() function invoked');
-    update($question, question);
+    update($question, quiz.question + question.name);
+    question.asked = true;
     $form[0].value = "";
     $form.focus();
     return;
@@ -91,13 +113,13 @@ window.onload = () => {
     return;
   };
   
-  const check = (answer, i) => {
+  const check = (answer) => {
     // Check if the answer is correct
     console.log('Check() function invoked');
     
-    if(i === quiz.questions.length || i > quiz.questions.length) {
+    /*if(quiz.questions.length || quiz.questions.length) {
       
-      if(answer.toLowerCase() === quiz.questions[i-1].realName.toLowerCase()) {
+      if(answer.toLowerCase() === quiz.questions[1].realName.toLowerCase()) {
         //Increase score by 1
         score++;
         update($score, score);
@@ -117,7 +139,7 @@ window.onload = () => {
         update($feedback, 'wrong', 'wrong');
         chooseQuestion(i);
       }
-    }
+    }*/
   };
   
   // Event listeners
@@ -127,13 +149,8 @@ window.onload = () => {
     });
     
   $form.addEventListener('submit', (ev) => {
-      if(i<3){
-        i++;
-      } else {
-        i = 0;
-      }
       ev.preventDefault();
-      check($form[0].value, i);
+      check($form[0].value);
   }, false);
  };
 })();
