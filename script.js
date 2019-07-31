@@ -97,12 +97,36 @@ window.onload = () => {
   
   
   const ask = (question) => {
-    console.log('Ask() function invoked');
-    update($question, quiz.question + question.name);
+    console.log('Ask() was invoked');
+    
     question.asked = true;
-    $form[0].value = "";
-    $form.focus();
-    return;
+    update($form, quiz.question + question.question + '?');
+    
+    var options = [], button;
+    var option1 = chooseOption();
+    options.push(option1.answer);
+    var option2 = chooseOption();
+    options.push(option2.answer);
+    
+    options.slice(random(0,2), 0, question.answer);
+    
+    options.forEach((name) => {
+      button = d.createElement('button');
+      button.value = name;
+      button.textContent = name;
+      $form.appendChild(button);
+    });
+    
+    function chooseOption() {
+      console.log('chooseQuestion() invoked');
+      // set the current question
+      let option = quiz.questions[random(quiz.questions.length) - 1];
+      
+       if(option === question || options.indexOf(option.answer) !== -1) {
+        return chooseOption();
+      }
+      return option;
+    }
   };
   
   const gameOver = () => {
@@ -117,9 +141,9 @@ window.onload = () => {
     // Check if the answer is correct
     console.log('Check() function invoked');
     
-    /*if(quiz.questions.length || quiz.questions.length) {
+    if(quiz.questions.length || quiz.questions.length) {
       
-      if(answer.toLowerCase() === quiz.questions[1].realName.toLowerCase()) {
+      if(answer.toLowerCase() === question.answer.toLowerCase()) {
         //Increase score by 1
         score++;
         update($score, score);
@@ -129,7 +153,7 @@ window.onload = () => {
         return gameOver(i);
       }
     } else {
-      if(answer.toLowerCase() === quiz.questions[i-1].realName.toLowerCase()) {
+      if(answer.toLowerCase() === question.answer.toLowerCase()) {
         update($feedback, 'correct', 'right');
         //Increase score by 1
         score++;
@@ -139,7 +163,7 @@ window.onload = () => {
         update($feedback, 'wrong', 'wrong');
         chooseQuestion(i);
       }
-    }*/
+    }
   };
   
   // Event listeners
@@ -148,9 +172,9 @@ window.onload = () => {
       return playQuiz(quiz);
     });
     
-  $form.addEventListener('submit', (ev) => {
+  $form.addEventListener('click', (ev) => {
       ev.preventDefault();
-      check($form[0].value);
+      check(ev.target.value);
   }, false);
  };
 })();
