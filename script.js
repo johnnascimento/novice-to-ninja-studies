@@ -123,7 +123,10 @@ window.onload = () => {
       let option = quiz.questions[random(quiz.questions.length) - 1];
       
        if(option === question || options.indexOf(option.answer) !== -1) {
-        return chooseOption();
+         console.log('*****$$$$$ question' + question);
+         console.log('*****$$$$$ option' + option);
+         console.log('*****$$$$$ options.index ' + options.indexOf(options.answer));
+        return ;
       }
       return option;
     }
