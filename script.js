@@ -22,13 +22,13 @@ window.onload = () => {
   
   const quiz = {
     name: "Super hero Quiz",
-    description: "Hiw many super heroes can you name?",
-    question: "What\'s the resl name of ",
+    description: "How many super heroes can you name?",
+    question: "What\'s the real name of ",
     questions: [
       { name: "Superman",realName: "Clark Kent", "asked": false },
       { name: "Wonderwoman",realName: "Dianna Prince", "asked": false },
       { name: "Batman",realName: "Bruce Wayne", "asked": false },
-      { name: "Batman",realName: "Bruce Wayne", "asked": false },
+      { name: "Joker",realName: "Joker", "asked": false },
       { name: "The Flash",realName: "Bary Allen", "asked": false },
       { name: "The Green Arrow",realName: "Oliver Queen", "asked": false },
       { name: "Aquamam",realName: "Arthur Curry", "asked": false }
@@ -100,13 +100,16 @@ window.onload = () => {
     console.log('Ask() was invoked');
     
     question.asked = true;
-    update($form, quiz.question + question.question + '?');
+    update($form, quiz.question + question.name + '?');
     
     var options = [], button;
     var option1 = chooseOption();
-    options.push(option1.answer);
+    console.log('----------&&---------- option 1  ' + option1.realName);
+    options.push(option1.realName);
     var option2 = chooseOption();
-    options.push(option2.answer);
+    options.push(option2.realName);
+    var option3 = chooseOption();
+    options.push(option2.realName);
     
     options.slice(random(0,2), 0, question.answer);
     
@@ -114,6 +117,7 @@ window.onload = () => {
       button = d.createElement('button');
       button.value = name;
       button.textContent = name;
+      button.classList.add('answerButtons');
       $form.appendChild(button);
     });
     
@@ -122,11 +126,11 @@ window.onload = () => {
       // set the current question
       let option = quiz.questions[random(quiz.questions.length) - 1];
       
-       if(option === question || options.indexOf(option.answer) !== -1) {
-         console.log('*****$$$$$ question' + question);
-         console.log('*****$$$$$ option' + option);
+       if(option === question || options.indexOf(option.realName) !== -1) {
+         console.log('*****$$$$$ question' + question.realName);
+         console.log('*****$$$$$ option' + option.name);
          console.log('*****$$$$$ options.index ' + options.indexOf(options.answer));
-        return ;
+       return chooseOption();
       }
       return option;
     }
@@ -134,6 +138,7 @@ window.onload = () => {
   
   const gameOver = () => {
     console.log('gameOver() invoked');
+    dQuery('.answerButtons').remove();
     hideElement($form);
     showElement($startBtn);
     update($question, `Game Over, you scored ${score} point${score !== 1 ? 's' : ''}`, 'gameOver');
@@ -144,29 +149,18 @@ window.onload = () => {
     // Check if the answer is correct
     console.log('Check() function invoked');
     
-    if(quiz.questions.length || quiz.questions.length) {
-      
-      if(answer.toLowerCase() === question.answer.toLowerCase()) {
-        //Increase score by 1
-        score++;
-        update($score, score);
-        return gameOver(i);
-      } else {
-        update($feedback, 'wrong', 'wrong');
-        return gameOver(i);
-      }
-    } else {
-      if(answer.toLowerCase() === question.answer.toLowerCase()) {
+      if(answer.toLowerCase() === question.realName.toLowerCase()) {
         update($feedback, 'correct', 'right');
+        
         //Increase score by 1
         score++;
         update($score, score);
-        chooseQuestion(i);
+        return chooseQuestion();
       } else {
+        update($score, score);
         update($feedback, 'wrong', 'wrong');
-        chooseQuestion(i);
+        return gameOver();
       }
-    }
   };
   
   // Event listeners
