@@ -110,6 +110,8 @@ window.onload = () => {
     options.push(option2.realName);
     var option3 = chooseOption();
     options.push(option2.realName);
+    var option4 = chooseQuestion();
+    options.push(option4.realName);
     
     options.slice(random(0,2), 0, question.answer);
     
