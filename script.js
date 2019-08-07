@@ -132,12 +132,6 @@ window.onload = () => {
     
     
     options.slice(random(0,7), 0, question.answer);
-    for(var i=0; i<options.length; i++) {
-      console.log('HEEEEEREEEE: ' + options[i]);
-    }
-    
-    console.log('has child nodes: ' + $form.hasChildNodes());
-    // REMOVE FOR CHILD FOR CHILD
     
     options.forEach((name) => {
       button = d.createElement('button');
@@ -182,11 +176,33 @@ window.onload = () => {
         //Increase score by 1
         score++;
         update($score, score);
+        
+        for(var i=1; i<$form.childNodes.length; i++) {
+          console.log('HEEEEEREEEE: ' + $form.childNodes[i]);
+          
+          console.log('has child nodes: ' + $form.hasChildNodes());
+          // REMOVE FOR CHILD FOR CHILD
+          if($form.hasChildNodes()) {
+            console.log(' the first child removing ' + $form.childNodes[i].remove());
+          }
+        }
+        
         return chooseQuestion();
       } else {
         update($score, score);
         update($feedback, 'wrong', 'wrong');
-        return gameOver();
+        
+        for(var i=1; i<$form.childNodes.length; i++) {
+          console.log('HEEEEEREEEE: ' + $form.childNodes[i]);
+          
+          console.log('has child nodes: ' + $form.hasChildNodes());
+          // REMOVE FOR CHILD FOR CHILD
+          if($form.hasChildNodes()) {
+            console.log(' the first child removing ' + $form.childNodes[i].remove());
+          }
+        }
+        
+        return chooseQuestion();
       }
   };
   
