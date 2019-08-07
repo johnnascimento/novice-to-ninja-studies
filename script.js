@@ -25,13 +25,13 @@ window.onload = () => {
     description: "How many super heroes can you name?",
     question: "What\'s the real name of ",
     questions: [
-      { name: "Superman",realName: "Clark Kent", "asked": false },
-      { name: "Wonderwoman",realName: "Dianna Prince", "asked": false },
-      { name: "Batman",realName: "Bruce Wayne", "asked": false },
-      { name: "Joker",realName: "Joker", "asked": false },
-      { name: "The Flash",realName: "Bary Allen", "asked": false },
-      { name: "The Green Arrow",realName: "Oliver Queen", "asked": false },
-      { name: "Aquamam",realName: "Arthur Curry", "asked": false }
+      { name: "Superman",realName: "Clark Kent", asked: false },
+      { name: "Wonderwoman",realName: "Dianna Prince", asked: false },
+      { name: "Batman",realName: "Bruce Wayne", asked: false },
+      { name: "Joker",realName: "Joker", asked: false },
+      { name: "The Flash",realName: "Bary Allen", asked: false },
+      { name: "The Green Arrow",realName: "Oliver Queen", asked: false },
+      { name: "Aquamam",realName: "Arthur Curry", asked: false }
     ]
   };
   
@@ -64,7 +64,6 @@ window.onload = () => {
     showElement($form);
     
     score = 0;
-    let question;
     update($score, score);
     chooseQuestion();
   };
@@ -87,10 +86,13 @@ window.onload = () => {
   const chooseQuestion = () => {
     console.log('chooseQuestion() invoked');
     var questions = quiz.questions.filter((elem) => {
+      console.log('$$$$$ filter step: ' + elem.name);
       return elem.asked === false;
     });
+    console.log('********** Questions after filtering ' + questions[0].name + ' Length ' + questions.length);
     // set the current question
     question = questions[random(questions.length) - 1];
+    console.log('random question: ' + question.name);
     
     return ask(question);
   };
@@ -98,22 +100,44 @@ window.onload = () => {
   
   const ask = (question) => {
     console.log('Ask() was invoked');
-    
+    console.log('######## ' + question.name);
     question.asked = true;
     update($form, quiz.question + question.name + '?');
     
     var options = [], button;
+    
     var option1 = chooseOption();
     console.log('----------&&---------- option 1  ' + option1.realName);
     options.push(option1.realName);
+    
     var option2 = chooseOption();
+    console.log('----------&&---------- option 2  ' + option2.realName);
     options.push(option2.realName);
+    
     var option3 = chooseOption();
-    options.push(option2.realName);
-    var option4 = chooseQuestion();
+    console.log('----------&&---------- option 3  ' + option3.realName);
+    options.push(option3.realName);
+    
+    var option4 = chooseOption();
+    console.log('----------&&---------- option 4  ' + option4.realName);
     options.push(option4.realName);
     
-    options.slice(random(0,2), 0, question.answer);
+    var option5 = chooseOption();
+    console.log('----------&&---------- option 5  ' + option5.realName);
+    options.push(option5.realName);
+    
+    var option6 = chooseOption();
+    console.log('----------&&---------- option 6  ' + option6.realName);
+    options.push(option6.realName);
+    
+    
+    options.slice(random(0,7), 0, question.answer);
+    for(var i=0; i<options.length; i++) {
+      console.log('HEEEEEREEEE: ' + options[i]);
+    }
+    
+    console.log('has child nodes: ' + $form.hasChildNodes());
+    // REMOVE FOR CHILD FOR CHILD
     
     options.forEach((name) => {
       button = d.createElement('button');
@@ -127,6 +151,7 @@ window.onload = () => {
       console.log('chooseQuestion() invoked');
       // set the current question
       let option = quiz.questions[random(quiz.questions.length) - 1];
+      
       
        if(option === question || options.indexOf(option.realName) !== -1) {
          console.log('*****$$$$$ question' + question.realName);
