@@ -85,7 +85,7 @@ window.onload = () => {
       elem.asked = false;
       console.log('elem asked after ', elem.asked);
     });
-  }
+  };
 
 
   const random = (a, b, callback) => {
