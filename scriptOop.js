@@ -17,6 +17,7 @@ let dGetById = (elem) => {
 
 let d = document;
 let b = d.body;
+let w = window;
 let $question = dGetById('question');
 let $score = dGetById('score');
 let $feedback = dGetById('feedback');
@@ -47,10 +48,10 @@ function Game(quiz){
   this.questions = quiz.questions;
   this.phrase = quiz.question;
   this.score = 0; // initialize score
-  this.update($score,this.score);
+  update($score,this.score);
   // initialize timer and set up an interval that counts down
   this.time = 20;
-  this.update($timer, this.time);
+  update($timer, this.time);
   this.interval = window.setInterval( this.countDown.bind(this), 1000 );
   // hide button and show form
   this.hide($start);
@@ -64,9 +65,9 @@ function Game(quiz){
 }
 
 //
-// Method definitions
+// Function definitions
 // -------------------------------
-Game.prototype.update = function(elem, content, klass) {
+const update = function(elem, content, klass) {
   console.log('update() invoked');
   var p;
   p = (!elem.firstChild) ? d.createElement('p') : elem.firstChild;
@@ -77,6 +78,23 @@ Game.prototype.update = function(elem, content, klass) {
   }
 };
 
+const random = function(a, b, callback) {
+  if(b === undefined || b === null) {
+    //if only one argument was supplied, assume that the lower limit is 1
+    b = a, a = 1;
+  }
+  
+  var result = Math.floor((b-a+1) * Math.random()) + a;
+  
+  if(typeof callback === "function") {
+    result = callback(result);
+  }
+  return result;
+};
+
+//
+// Method definitions
+// -------------------------------
 Game.prototype.show = function(elem) {
   elem.style.display = "block";
   return this;
@@ -91,33 +109,20 @@ Game.prototype.chooseQuestion = function() {
   console.log("chooseQuestion() called");
   var questions = this.questions.filter(function(question){
     return question.asked === false;
-  });
+  }.bind(this));
   // set the current question
-  this.question = questions[this.random(questions.length) - 1];
+  this.question = questions[random(questions.length) - 1];
   this.ask(this.question);
 };
 
-Game.prototype.random = function(a, b, callback) {
-  if(b === undefined || b === null) {
-    //if only one argument was supplied, assume that the lower limit is 1
-    b = a, a = 1;
-  }
-  
-  var result = Math.floor((b-a+1) * Math.random()) + a;
-  
-  if(typeof callback === "function") {
-    result = callback(result);
-  }
-  return result;
-};
 
 Game.prototype.ask = function(question) {
   console.log("ask() called");
   var quiz = this;
-  randomFunction = quiz.random;
+  
   // set the question.asked property to true so it’s not asked again
   question.asked = true;
-  this.update($question,this.phrase + question.question + "?");
+  update($question,this.phrase + question.question + "?");
     // clear the previous options
     $form.innerHTML = "";
     // create an array to put the different options in and a button
@@ -128,7 +133,7 @@ Game.prototype.ask = function(question) {
     var option2 = chooseOption();
     options.push(option2.answer);
     // add the actual answer at a random place in the options array
-    options.splice(quiz.random(0,2),0,this.question.answer);
+    options.splice(random(0,2), 0, this.question.answer);
     // loop through each option and display it as a button
     options.forEach(function(name) {
       button = document.createElement("button");
@@ -139,7 +144,8 @@ Game.prototype.ask = function(question) {
     // choose an option from all the possible answers but without
     // choosing the answer or the same option twice
     function chooseOption() {
-      var option = quiz.questions[Game.random(quiz.questions.length) - 1];
+      var option = quiz.questions[random(quiz.questions.length) - 1];
+      console.log('option ', option);
       // check to see if the option chosen is the current question or
       // already one of the options, if it is then recursively call this
       // function until it isn’t
@@ -168,7 +174,7 @@ Game.prototype.countDown = function() {
      // decrease time by 1
      this.time--;
      // update the time displayed
-     this.update($timer,this.time);
+     update($timer,this.time);
      // the game is over if the timer has reached 0
      if(this.time <= 0) {
        this.gameOver();
@@ -179,12 +185,13 @@ Game.prototype.gameOver = function() {
      console.log("gameOver() invoked");
      // inform the player that the game has finished and tell them how
      // many points they have scored
-     this.update($question,"Game Over, you scored " + this.score + " points");
+     update($question,"Game Over, you scored " + this.score + " points");
      // stop the countdown interval
      window.clearInterval(this.interval);
      hide($form);
      show($start);
-   };
-   
+};
+
+
 // Event listeners
 $start.addEventListener('click', function() { new Game(quiz) }, false);
