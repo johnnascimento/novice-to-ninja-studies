@@ -78,13 +78,16 @@ const update = function(elem, content, klass) {
   }
 };
 
-const random = function(a, b, callback) {
+const random2 = function(a, b, callback) {
   if(b === undefined || b === null) {
     //if only one argument was supplied, assume that the lower limit is 1
     b = a, a = 1;
+    cl(b, a);
   }
   
   var result = Math.floor((b-a+1) * Math.random()) + a;
+  cl('result', result);
+  cl('callback', callback);
   
   if(typeof callback === "function") {
     result = callback(result);
@@ -112,6 +115,7 @@ Game.prototype.chooseQuestion = function() {
   }.bind(this));
   // set the current question
   this.question = questions[random(questions.length) - 1];
+  cl('question at choosequestion()', question);
   this.ask(this.question);
 };
 
@@ -188,8 +192,8 @@ Game.prototype.gameOver = function() {
      update($question,"Game Over, you scored " + this.score + " points");
      // stop the countdown interval
      window.clearInterval(this.interval);
-     hide($form);
-     show($start);
+     this.hide($form);
+     this.show($start);
 };
 
 
