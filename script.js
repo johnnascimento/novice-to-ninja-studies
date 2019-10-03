@@ -264,7 +264,7 @@ window.onload = () => {
     for(let i = 0; i < elem.length; i++) {
       elem[i].remove();
     }
-  }
+  };
 
   // Event listeners
   // ------------------------
