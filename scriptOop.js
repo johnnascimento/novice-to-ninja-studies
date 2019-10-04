@@ -33,6 +33,7 @@ cl('*******************************');
     let $startBtn = dGetById('startBtn');
     let $form = dGetById('answer');
     let $timer = dGetById('timer');
+    let $buttons;
     
     const quiz = {
       name: "Super hero Quiz",
@@ -73,8 +74,19 @@ cl('*******************************');
       elem.style.display = "none";
     };
     
-    hideElement($form);
     
+    // Functions
+    // ------------------------------
+    const removeButtons = (elem) => {
+      console.log('*******************************');
+      console.log('Remove buttons function invoked');
+      console.log('*******************************');
+      for(let i = 0; i < elem.length; i++) {
+        elem[i].remove();
+      }
+    };
+    
+    hideElement($form);
     
     Game.prototype.bindClickHandler = function() {
         $form.addEventListener('click', function(ev) {
@@ -114,6 +126,7 @@ cl('*******************************');
       // the game is over if the timer has reached 0
       if(this.time <= 0) {
         this.gameOver();
+        update($question, `Game Over, you scored ${this.score} point${this.score !== 1 ? 's' : ''}`, 'gameOver');
       }
     };
     
@@ -129,6 +142,8 @@ cl('*******************************');
         elem.asked = false;
         console.log('elem asked after ', elem.asked);
       });
+      
+      update($question, ' ');
     };
     
     
@@ -222,7 +237,7 @@ cl('*******************************');
         let option = quiz.questions[random(quiz.questions.length) - 1];
         
         
-        if(/*option === question || */ _self.options.indexOf(option.realName) !== -1) {
+        if(_self.options.indexOf(option.realName) !== -1) {
           console.log('*****$$$$$ question' + question.realName);
           console.log('*****$$$$$ option' + option.name);
           console.log('*****$$$$$ options.index ' + _self.options.indexOf(_self.options.answer));
@@ -232,8 +247,12 @@ cl('*******************************');
       }
     };
     
+    
     Game.prototype.gameOver = function() {
       console.log('gameOver() invoked');
+      $buttons = document.querySelectorAll('.answerButtons');
+      
+      removeButtons($buttons);
       hideElement($form);
       showElement($startBtn);
       window.clearInterval(this.interval);
@@ -245,7 +264,8 @@ cl('*******************************');
       // Check if the answer is correct
       console.log('Check() function invoked');
       
-      let buttons = document.querySelectorAll('.answerButtons');
+      $buttons = document.querySelectorAll('.answerButtons');
+      
       let howManyQuestionYet = 0;
       
       if(answer.toLowerCase() === this.question.realName.toLowerCase()) {
@@ -255,11 +275,12 @@ cl('*******************************');
         this.score++;
         update($score, this.score);
         
-        removeButtons(buttons);
+        removeButtons($buttons);
         howManyQuestionYet = this.checkForAskedQuestion(howManyQuestionYet);
         console.log('howManyQuestionYet ', howManyQuestionYet);
         
         if(howManyQuestionYet <= 0) {
+          update($feedback, ' ');
           return this.gameOver();
         } else {
           return this.chooseQuestion();
@@ -268,11 +289,12 @@ cl('*******************************');
         update($score, this.score);
         update($feedback, 'wrong', 'wrong');
         
-        removeButtons(buttons);
+        removeButtons($buttons);
         howManyQuestionYet = this.checkForAskedQuestion(howManyQuestionYet);
         console.log('howManyQuestionYet in check() function ', howManyQuestionYet);
         
         if(howManyQuestionYet <= 0) {
+          update($feedback, ' ');
           return this.gameOver();
         } else {
           return this.chooseQuestion();
@@ -281,6 +303,7 @@ cl('*******************************');
         return this.chooseQuestion();
       }
     };
+    
     
     Game.prototype.checkForAskedQuestion = function(howManyQuestionYet) {
       console.log('****************************************');
@@ -309,16 +332,6 @@ cl('*******************************');
       return howManyQuestionYet;
     };
     
-    // Functions
-    // ------------------------------
-    const removeButtons = (elem) => {
-      console.log('*******************************');
-      console.log('Remove buttons function invoked');
-      console.log('*******************************');
-      for(let i = 0; i < elem.length; i++) {
-        elem[i].remove();
-      }
-    };
     
     // Event listeners
     // ------------------------
