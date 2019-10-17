@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>HTML + Bootstrap</title>
+
+  <!-- HTML -->
+
+  <!-- Bootstrap -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.2/dist/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body>
+  <form name="superHeroeForm" action="superHeroe">
+    <input type="text" name="heroeName" placeholder="Heroe\'s name" data-placeholder="Hero\'s name" />
+    <input type="text" name="heroePower" placeholder="Heroe\'s super power" data-placeholder="Heroe\'s power" />
+    <input type="text" name="heroeRealName" placeholder="Heroe\'s real name" data-placeholder="Heroe\'s real name" />
+
+    <p class="power">Which other power would this character have?</p>
+    <label for="xRayVision">X-ray vision</label>
+    <input type="checkbox" id="xRayVision" value="X-ray vision" name="powers" />
+
+     <br>
+    <label for="superStrength">Super strength</label>
+    <input type="checkbox" id="superStrength" value="Super Strength" name="powers" />
+
+    <br>
+    <label for="superSpeed">Super speed</label>
+    <input type="checkbox" id="superSpeed" value="Super Speed" name="powers" />
+
+    <p class="radioType">What type of hero are you?</p>
+    <label>Hero:</label>
+    <input type="radio" name="radioType" value="Hero" checked>
+    <label>Villain:</label>
+    <input type="radio" name="radioType" value="Villain">
+    <label>Anti-Hero:</label>
+    <input type="radio" name="radioType" value="Antihero">
+
+    <hr>
+
+    <label for="city">Choose a city</label>
+    <select name="city" class="chooseCity" >
+      <option value="" selected>Choose a city</option>
+      <option value="Metropolis">Metropolis</option>
+      <option value="Coast city">Coast city</option>
+      <option value="Gotham city">MGothsm city</option>
+      <option value="Star city">Star city</option>
+    </select>
+
+    <button type="button" name="submitButton">Submit</button>
+    <button type="reset" name="resetButton">Reset</button>
+  </form>
+
+  <div class="placeToPrint"></div>
+  <!-- Project -->
+  <script type="text/javascript" src="script.js"></script>
+</body>
+</html>
