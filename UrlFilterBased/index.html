@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css" />
+  <title>Url filter based</title>
+</head>
+<body>
+  
+  <div class="filterContainer">
+    <ul class="filterWrapper">
+      <li class="filterItem">
+        <label for="checkboxItem" class="checkboxWrapper">
+          <input type="checkbox" id="checkboxItem" class="checkboxItem" name="checkboxItem" />
+          <a data-href="/urlbase/123/*?SA123/" class="urlItem">item 1</a>
+        </label>
+      </li>
+      <li class="filterItem">
+        <label for="checkboxItem2" class="checkboxWrapper">
+          <input type="checkbox" id="checkboxItem2" class="checkboxItem" name="checkboxItem" />
+          <a data-href="/urlbase/123/*?SA1234/" class="urlItem">item 1</a>
+        </label>
+      </li>
+      <li class="filterItem">
+        <label for="checkboxItem3" class="checkboxWrapper">
+          <input type="checkbox" id="checkboxItem3" class="checkboxItem" name="checkboxItem" />
+          <a data-href="/urlbase/123/*?SA12345/" class="urlItem">item 1</a>
+        </label>
+      </li>
+      <li class="filterItem">
+        <label for="checkboxItem4" class="checkboxWrapper">
+          <input type="checkbox" id="checkboxItem4" class="checkboxItem" name="checkboxItem" />
+          <a data-href="/urlbase/123/*?SA123456/" class="urlItem">item 1</a>
+        </label>
+      </li>
+      <li class="filterItem">
+        <ul class="submenu">
+          <li class="filterItem">
+            <label for="checkboxItem5" class="checkboxWrapper">
+              <input type="checkbox" id="checkboxItem5" class="checkboxItem" name="checkboxItem" />
+              <a data-href="/urlbase/123/*?SA1234567/" class="urlItem">item 1</a>
+            </label>
+          </li>
+          <li class="filterItem">
+            <label for="checkboxItem6" class="checkboxWrapper">
+              <input type="checkbox" id="checkboxItem6" class="checkboxItem" name="checkboxItem" />
+              <a data-href="/urlbase/123/*?SA12345678/" class="urlItem">item 1</a>
+            </label>
+          </li>
+          <li class="filterItem">
+            <label for="checkboxItem7" class="checkboxWrapper">
+              <input type="checkbox" id="checkboxItem7" class="checkboxItem" name="checkboxItem" />
+              <a data-href="/urlbase/123/*?SA123456789/" class="urlItem">item 1</a>
+            </label>
+          </li>
+        </ul>
+      </li>
+      <li class="filterItem">
+        <label for="checkboxItem8" class="checkboxWrapper">
+          <input type="checkbox" id="checkboxItem8" class="checkboxItem" name="checkboxItem" />
+          <a data-href="/urlbase/123/*?SA12345678910/" class="urlItem">item 1</a>
+        </label>
+      </li>
+      <li class="filterItem">
+        <label for="checkboxItem9" class="checkboxWrapper">
+          <input type="checkbox" id="checkboxItem9" class="checkboxItem" name="checkboxItem" />
+          <a data-href="/urlbase/123/*?SA1234567891011/" class="urlItem">item 1</a>
+        </label>
+      </li>
+    </ul>
+  </div>
+  
+  <div class="outputDiv"></div>
+  <script src="script.js"></script>
+</body>
+</html>

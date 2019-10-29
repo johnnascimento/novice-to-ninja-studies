@@ -14,6 +14,7 @@ cl('*******************************');
 (() => {
   "use strict";
   window.onload = () => {
+    
     // Helpers
     const d = document;
     const b = d.body || d.bodyElement;
@@ -35,22 +36,28 @@ cl('*******************************');
     let $timer = dGetById('timer');
     let $buttons;
     
-    const quiz = {
-      name: "Super hero Quiz",
-      description: "How many super heroes can you name?",
-      question: "What\'s the real name of ",
-      questions: [
-        { name: "Superman",realName: "Clark Kent", asked: false },
-        { name: "Wonderwoman",realName: "Dianna Prince", asked: false },
-        { name: "Batman",realName: "Bruce Wayne", asked: false },
-        { name: "Joker",realName: "Joker", asked: false },
-        { name: "The Flash",realName: "Bary Allen", asked: false },
-        { name: "The Green Arrow",realName: "Oliver Queen", asked: false },
-        { name: "Aquamam",realName: "Arthur Curry", asked: false }
-      ]
+    // Get quiz via ajax
+    const getQuiz = () => {
+      cl('getQuiz() function was invoked!');
+      let xhr = new XMLHttpRequest();
+      cl('Xhr was instantiated ', xhr);
+      xhr.onreadystatechange = function() {
+        cl('On ready state change now');
+        if(xhr.readyState === 4 && xhr.status == 200) {
+          cl('Within If\'s premises');
+          var quiz = JSON.parse(xhr.responseText);
+          cl(xhr.responseText, ' Reaponse text ');
+          //let max = (quiz.questions.length)-1;
+          return new Game(quiz);
+        }
+      };
+        
+        cl('it didn\'t pass by the IF statement');
+        xhr.open('GET', 'https://s3.amazonaws.com/sitepoint-book-content/jsninja/quiz.json', true);
+        xhr.overrideMimeType('application/json');
+        xhr.send();
+        update($question, 'Waiting for response');
     };
-    
-    let max = (quiz.questions.length)-1;
     
     // View functions
     const update = (elem, content, klass) => {
@@ -68,7 +75,6 @@ cl('*******************************');
     const showElement = (elem) => {
       elem.style.display = "block";
     };
-    
     
     const hideElement = (elem) => {
       elem.style.display = "none";
@@ -98,6 +104,9 @@ cl('*******************************');
     function Game(quiz) {
       console.log('PlayQuiz() invoked');
       this.questions = quiz.questions;
+      
+      cl('Quiz questions within Game() ', this.questions);
+      
       this.phrase = quiz.question;
       this.score = 0; // initialize score
       
@@ -165,7 +174,7 @@ cl('*******************************');
     Game.prototype.chooseQuestion = function() {
       console.log('chooseQuestion() invoked');
       this._questions = this.questions.filter((elem) => {
-        console.log('$$$$$ filter step: ' + elem.name);
+        console.log('$$$$$ filter step: ' + elem.question, elem.answer);
         return elem.asked === false;
       });
       
@@ -174,7 +183,7 @@ cl('*******************************');
       // set the current question
       this.question = this._questions[random(this._questions.length) - 1];
       
-      console.log('random question: ' + this.question.name);
+      console.log('random question: ' + this.question.answer);
       
       return this.ask(this.question);
     };
@@ -182,41 +191,43 @@ cl('*******************************');
     
     Game.prototype.ask = function(question) {
       console.log('Ask() was invoked');
-      console.log('######## ' + question.name);
+      console.log('######## ' + question.question);
+      
+      cl('Quiz within Ask() ', question);
       
       question.asked = true;
-      update($form, quiz.question + question.name + '?');
+      update($form, question.question + '?');
       let _self = this;
       
       this.options = [];
       this.button;
       let option1, option2, option3, option4, option5, option6, option7;
       
-      option1 = chooseOption();
+      option1 = chooseOption(question);
       console.log('----------&&---------- option 1  ' + option1.realName);
       this.options.push(option1.realName);
       
-      option2 = chooseOption();
+      option2 = chooseOption(question);
       console.log('----------&&---------- option 2  ' + option2.realName);
       this.options.push(option2.realName);
       
-      option3 = chooseOption();
+      option3 = chooseOption(question);
       console.log('----------&&---------- option 3  ' + option3.realName);
       this.options.push(option3.realName);
       
-      option4 = chooseOption();
+      option4 = chooseOption(question);
       console.log('----------&&---------- option 4  ' + option4.realName);
       this.options.push(option4.realName);
       
-      option5 = chooseOption();
+      option5 = chooseOption(question);
       console.log('----------&&---------- option 5  ' + option5.realName);
       this.options.push(option5.realName);
       
-      option6 = chooseOption();
+      option6 = chooseOption(question);
       console.log('----------&&---------- option 6  ' + option6.realName);
       this.options.push(option6.realName);
       
-      option7 = chooseOption();
+      option7 = chooseOption(question);
       console.log('----------&&---------- option 6  ' + option7.realName);
       this.options.push(option7.realName);
       
@@ -231,15 +242,17 @@ cl('*******************************');
         $form.appendChild(this.button);
       });
       
-      function chooseOption() {
+      function chooseOption(questions) {
         console.log('chooseQuestion() invoked');
         // set the current question
-        let option = quiz.questions[random(quiz.questions.length) - 1];
+        cl('Quiz ', question);
+        
+        let option = questions[random(questions.length) - 1];
         
         
-        if(_self.options.indexOf(option.realName) !== -1) {
-          console.log('*****$$$$$ question' + question.realName);
-          console.log('*****$$$$$ option' + option.name);
+        if(_self.options.indexOf(option.question) !== -1) {
+          console.log('*****$$$$$ question' + question.question);
+          console.log('*****$$$$$ option' + option.answer);
           console.log('*****$$$$$ options.index ' + _self.options.indexOf(_self.options.answer));
           return chooseOption();
         }
@@ -335,8 +348,6 @@ cl('*******************************');
     
     // Event listeners
     // ------------------------
-    $startBtn.addEventListener('click', function() {
-      return new Game(quiz);
-    });
+    $startBtn.addEventListener('click', getQuiz, false);
   };
 })();

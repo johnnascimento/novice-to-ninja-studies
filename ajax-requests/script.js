@@ -75,19 +75,50 @@ class HeroeForm {
       } else {
         cl('Didn\'t work! Good try though');
       }
-    }
+    };
     xhr.send(data);
+  }
+
+  submitHero(elem) {
+    cl('SubmiHeroe was invoked');
+    
+    let form = elem;
+    let data = new FormData(form);
+    cl('FormData() constructor function', data);
+    cl('First elem in FormData: ', elem.length);
+    
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', 'https://reqres.in/api/users', true);
+    xhr.setRequestHeader('Content-type', 'application/json', 'Access-Control-Allow-Origin');
+    
+    xhr.onreadystatechange = function() {
+      if(xhr.readyState === 4 && xhr.status === 201) {
+        cl('Ajax response simulated: ', xhr.responseText);
+      } else {
+        cl('Didn\'t work! Good try though');
+      }
+    };
+    xhr.timeout = 5000;
+    xhr.ontimeout = () => {
+      cl('You\'re requst\'s waiting time has run out ', xhr.responseText);
+    };
+    
+    xhr.send(data);
+    alert('DATA IS: ', data);
   }
 
   bindEvents() {
     cl('submit button ', this.form.submitButton );
+    let _self = this;
+    //this.form.submitButton.addEventListener('click', function(){
+     // let stringifiedData = this.storeValueFromForm();
+     // cl('stringifiedData', stringifiedData);
 
-    this.form.submitButton.addEventListener('click', function(){
-      let stringifiedData = this.storeValueFromForm();
-      cl('stringifiedData', stringifiedData);
-
-      this.sendInfoThrough(stringifiedData);
-    }.bind(this), false);
+    //  this.sendInfoThrough(stringifiedData);
+    //}.bind(this), false);
+    this.form.submitButton.addEventListener('click', function() {
+        _self.submitHero(_self.form);
+    }, false);
   }
 
   init() {
@@ -98,6 +129,9 @@ class HeroeForm {
 
 // Variables and instance creation
 let $heroeForm = d.forms.superHeroeForm;
-let heoreFormInstance = new HeroeForm($heroeForm);
+let $heroFormGById = d.getElementById('superHeroesForm');
+//let heoreFormInstance = new HeroeForm($heroeForm);
+
+let heoreFormInstance = new HeroeForm($heroFormGById);
 
 heoreFormInstance.init();

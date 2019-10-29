@@ -1,0 +1,44 @@
+* {
+  margin: 0 auto;
+  line-height: 16px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+ul {
+  width: 100%;
+  margin: 16px;
+  list-style: none;
+  padding: 0;
+  display: block;
+  position: relative;
+}
+
+ul li {
+  width: 100%;
+  padding: 8px 0;
+  line-height: 16px;
+  display: block;
+  position: relative;
+  background: coral;
+  border: 1px solid red;
+}
+
+ul li label {
+  display: block;
+  width: 100%;
+}
+
+ul li ul {
+  padding: 0 0 0 16px;
+}
+
+.checkboxItem,
+.urlItem {
+  pointer-events: none;
+}
+
